@@ -1,0 +1,30 @@
+1、QString chop
+void QString::chop(int n)
+从字符串的末尾移除n个字符。
+如果n大于size()，结果是一个空字符串。
+如果想从字符串的开头移除字符串，使用remove()。
+2、QFileInfo suffix
+QString QFileInfo::suffix() const
+返回文件的后缀名。后缀名由文件名中最后一个'.'之后(但不包含'.')的字符组成。
+3、QMetaObject invokeMethod
+这个函数包含四个重载形式，基本功能相同。
+bool	invokeMethod(QObject * obj, const char * member, Qt::ConnectionType type, QGenericReturnArgument ret, QGenericArgument val0 = QGenericArgument( 0 ), QGenericArgument val1 = QGenericArgument(), QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument(), QGenericArgument val4 = QGenericArgument(), QGenericArgument val5 = QGenericArgument(), QGenericArgument val6 = QGenericArgument(), QGenericArgument val7 = QGenericArgument(), QGenericArgument val8 = QGenericArgument(), QGenericArgument val9 = QGenericArgument());
+
+bool	invokeMethod(QObject * obj, const char * member, QGenericReturnArgument ret, QGenericArgument val0 = QGenericArgument( 0 ), QGenericArgument val1 = QGenericArgument(), QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument(), QGenericArgument val4 = QGenericArgument(), QGenericArgument val5 = QGenericArgument(), QGenericArgument val6 = QGenericArgument(), QGenericArgument val7 = QGenericArgument(), QGenericArgument val8 = QGenericArgument(), QGenericArgument val9 = QGenericArgument());
+
+bool	invokeMethod(QObject * obj, const char * member, Qt::ConnectionType type, QGenericArgument val0 = QGenericArgument( 0 ), QGenericArgument val1 = QGenericArgument(), QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument(), QGenericArgument val4 = QGenericArgument(), QGenericArgument val5 = QGenericArgument(), QGenericArgument val6 = QGenericArgument(), QGenericArgument val7 = QGenericArgument(), QGenericArgument val8 = QGenericArgument(), QGenericArgument val9 = QGenericArgument());
+
+bool	invokeMethod(QObject * obj, const char * member, QGenericArgument val0 = QGenericArgument( 0 ), QGenericArgument val1 = QGenericArgument(), QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument(), QGenericArgument val4 = QGenericArgument(), QGenericArgument val5 = QGenericArgument(), QGenericArgument val6 = QGenericArgument(), QGenericArgument val7 = QGenericArgument(), QGenericArgument val8 = QGenericArgument(), QGenericArgument val9 = QGenericArgument());
+以第一种形式进行介绍。
+bool QMetaObject::invokeMethod(QObject * obj, const char * member, Qt::ConnectionType type, QGenericReturnArgument ret, QGenericArgument val0 = QGenericArgument( 0 ), QGenericArgument val1 = QGenericArgument(), QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument(), QGenericArgument val4 = QGenericArgument(), QGenericArgument val5 = QGenericArgument(), QGenericArgument val6 = QGenericArgument(), QGenericArgument val7 = QGenericArgument(), QGenericArgument val8 = QGenericArgument(), QGenericArgument val9 = QGenericArgument())
+调用对象obj的memeber(一个信号或槽的名称)。如果memeber可以被调用返回true。如果member不存在或参数不匹配返回false。
+基于type，调用既可以是同步的，也可以是异步的：
+Qt::DirectConnection，member会被马上调用。
+Qt::QueuedConnection，发送一个QEvent，一旦应用程序进入主事件队列则调用member。
+Qt::BlockingQueuedConnection，member的调用方式与Qt::QueuedConnection一样，区别在于当前线程被阻塞直到事件被发送。使用这种连接类型在同一线程的不同对象间交互会导致死锁。
+Qt::AutoConnection，如果obj与调用者在同一线程，则member会被同步调用；否则member会被异步调用。
+member函数的返回值被放置在ret中，如果用异步方式调用，则返回值无法被计算。可以给member传递10个参数。
+QGenericArgument和QGenericReturnArgument是内部辅助函数。因为信号和槽可以被动态调用，你必须用Q_ARG()和Q_RETURN_ARG()宏包装这个参数。Q_ARG()含有一个类型名称和该类型的const引用。Q_RETURN_ARG()含有一个类型名和一个非const引用。
+只需要给这个函数传递信号或槽的名称，不需要全部的声明。
+通过异步方法调用，参数类型必须是Qt的meta-object系统已知的类型，因为Qt需要复制参数并将它们保存在事件中。
+使用自定义类型时，在调用invokeMethod()之前使用qRegisterMetaType()去注册数据类型。
