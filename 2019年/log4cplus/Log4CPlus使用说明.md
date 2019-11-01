@@ -433,7 +433,7 @@ config.configure();
 | `MaxBackupIndex `                                    | 最多文件个数                                                 |
 | `log4cplus.appender.ALL_MSGS.MaxBackupIndex=10 `     |                                                              |
 | `DatePattern`                                        | 指定文件名的日期格式 1)`'.'yyyy-MM`: 每月 2)`'.'yyyy-ww`: 每周 3)`'.'yyyy-MM-dd`: 每天  4)`'.'yyyy-MM-dd-a`: 每天两次 			5)`'.'yyyy-MM-dd-HH`: 每小时 			6)`'.'yyyy-MM-dd-HH-mm`: 每分钟 |
-| `log4cplus.appender.ALL_MSGS.DatePattern='.'yyyy-ww` |                                                              |
+| `log4cplus.appender.ALL_MSGS.DatePattern='.'yyyy-ww` | 貌似用这种方式不会重命名文件，应该用MONTHLY      : "%Y-%m"<br/>WEEKLY       : "%Y-%W"<br/>DAILY        : "%Y-%m-%d"<br/>TWICE_DAILY  : "%Y-%m-%d-%p"<br/>HOURLY       : "%Y-%m-%d-%H"<br/>MINUTELY     : "%Y-%m-%d-%H-%M" |
 
 `RollingFileAppender`的相关配置：
 
@@ -497,6 +497,3 @@ log4cplus.appender.append_1.filters.1.AcceptOnMatch=true
 log4cplus.appender.appender_name.layout = log4cplus::PatternLayout
 log4cplus.appender.appender_name.ConversionPattern = %d{%m/%d/%y %H:%M:%S,%Q} [%t] %-5p - %m%n
 ~~~
-
-
-
