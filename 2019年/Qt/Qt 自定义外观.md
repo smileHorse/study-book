@@ -51,11 +51,11 @@ QCheckBox, QComboBox, QLineEdit, QListView, QRadioButton, QSpinBox {
 
 颜色的指定方式：
 
-	- 名称：可以使用任何能被`QColor::setNameColor()`函数识别的名字。`color: yellow;`
-	- `#RRGGBB`格式：HTML样式的字符串。`color: #050505;`
-	- `RGB`或`RGBA`值：指定红、绿、蓝部分，它们的取值范围是0至255，或0%至100%区间的值。`RGBA`额外需要一个透明度作为第四个值。`color: rgb(0, 88, 152);`或`color: rgba(97%, 80%, 9%, 50%)`
-	- 调色板实体：`color: palette(Base);`
-	- 渐变：`color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1, stop: 0 white, stop: 0.4 gray, stop: 1 green);`
+- 名称：可以使用任何能被`QColor::setNameColor()`函数识别的名字。`color: yellow;`
+- `#RRGGBB`格式：HTML样式的字符串。`color: #050505;`
+- `RGB`或`RGBA`值：指定红、绿、蓝部分，它们的取值范围是0至255，或0%至100%区间的值。`RGBA`额外需要一个透明度作为第四个值。`color: rgb(0, 88, 152);`或`color: rgba(97%, 80%, 9%, 50%)`
+- 调色板实体：`color: palette(Base);`
+- 渐变：`color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1, stop: 0 white, stop: 0.4 gray, stop: 1 green);`
 
 #### background-image：指定一个图片作为背景
 
