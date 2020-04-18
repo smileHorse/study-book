@@ -185,6 +185,6 @@ Promise.all([getJSON("data/ninjas.json"),
 })
 ~~~
 
-通过使用内置方法`Promise.all`可以等待多个`promise`。这个方法将一个`promise`数组作为参数，然后创建一个新的`promise`对象，一旦数组中的`promise`全部被解决，这个返回的`promise`就会被解决，而一旦其中有一个`promise`失败了，那么整个心`promise`对象也会被拒绝。后续的回调函数接受成功值组成的数组，数组中的每一项都对应`promise`数组中的对应项。
+通过使用内置方法`Promise.all`可以等待多个`promise`。这个方法将一个`promise`数组作为参数，然后创建一个新的`promise`对象，一旦数组中的`promise`全部被解决，这个返回的`promise`就会被解决，而一旦其中有一个`promise`失败了，那么整个`promise`对象也会被拒绝。后续的回调函数接受成功值组成的数组，数组中的每一项都对应`promise`数组中的对应项。
 
 `Promise.all`方法等待列表中的所有`promise`。`Promise.race`只关心第一个成功或失败的`promise`。
