@@ -339,29 +339,29 @@ column-rule: 1px solid red;
 
 ~~~css
 #container {
-			display: flex;
-			border: solid 5px blue;
-			flex-direction: row;
-			width: 600px;
-			height: 300px;
-		}
-		#text-a, #text-b, #text-c {
-			box-sizing: border-box;
-			font-size: 1.5em;
-			font-weight: bold;
-			width: 250px;
-			flex-shrink: 1;
-		}
-		#text-a {
-			background-color: orange;
-		}
-		#text-b {
-			background-color: yellow;
-			flex-shrink: 3;
-		}
-		#text-c {
-			background-color: limegreen;
-		}
+    display: flex;
+    border: solid 5px blue;
+    flex-direction: row;
+    width: 600px;
+    height: 300px;
+}
+#text-a, #text-b, #text-c {
+    box-sizing: border-box;
+    font-size: 1.5em;
+    font-weight: bold;
+    width: 250px;
+    flex-shrink: 1;
+}
+#text-a {
+    background-color: orange;
+}
+#text-b {
+    background-color: yellow;
+    flex-shrink: 3;
+}
+#text-c {
+    background-color: limegreen;
+}
 ~~~
 
 使用`flex-shrink`属性时，计算过程为：
@@ -409,9 +409,9 @@ flex: flex-grow样式属性值	flex-shrink样式属性值	flex-basis样式属性
 - `main axis:`进行布局时作为布局基准的轴，在横向布局时为水平轴，在纵向布局时为垂直轴；
 - `main-start/main-end:`进行布局时的布局起点与布局终点。在横向布局时为容器的左端与右端，在纵向布局时为容器的顶端与底端；
 - `cross axis:`与`main axis`垂直相交的轴，在横向布局时为垂直轴，在纵向布局时为水平轴；
-- `cross-start/cross-end:``cross axis`轴的起点与终点。在横向布局时为容器的顶端与底端，在纵向布局时为容器的左端与右端。将`flex-wrap`属性值指定为`wrap`且进行横向多行布局时，按从`cross-start`到`cross-end`方向，即从上往下布局，将`flex-wrap`属性值指定为`wrap-reverse`且进行横向多行布局时，按从`cross-end`到`cross-start`方向，即从下往上布局。
+- `cross-start/cross-end:` `cross axis`轴的起点与终点。在横向布局时为容器的顶端与底端，在纵向布局时为容器的左端与右端。将`flex-wrap`属性值指定为`wrap`且进行横向多行布局时，按从`cross-start`到`cross-end`方向，即从上往下布局，将`flex-wrap`属性值指定为`wrap-reverse`且进行横向多行布局时，按从`cross-end`到`cross-start`方向，即从下往上布局。
 
-#### 3.8.2 `justify-content`属性
+#### 3.8.2 `justify-content`属性   
 
 ​	`justify-content`属性用于指定如何布局容器中除了子元素之外的`main axis`轴方向上的剩余空白部分。当`flex-grow`属性值不为0时，各子元素在`main axis`轴方向上自动填满容器，所以`justify-content`属性值无效。
 
