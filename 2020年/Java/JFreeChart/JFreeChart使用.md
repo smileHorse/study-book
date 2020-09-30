@@ -534,3 +534,233 @@ public class LineChartDemo2 extends ApplicationFrame {
  运行结果为：
 
 ![1582458754404](.\LineChart2.png)
+
+## 8 自定义图表
+
+### 8.1 图表属性
+
+​	使用JFreeChart类中的方法，可以自定义图标的外观。可以控制以下几个方面：
+
+- 图表边框；
+- 标题和子标题；
+- 背景颜色和背景图片；
+- 用于绘制图表的渲染提示，包括是否使用抗锯齿；
+
+#### 8.1.1 边框
+
+​	JFreeChart可以在图标的外围绘制一个边框。默认是没有边框的，可以通过setBorderVisible()方法来改变这个设置。通过使用setBorderPaint()和setBorderStroke()方法来改变边框的颜色和线条样式。
+
+​	如果是在ChartPanel中显示图标，使用Swing提供的边框是更好地选择。
+
+#### 8.1.2 标题
+
+​	图表的标题可以显示在图表的上、下、左、右任一位置。标题是TextTitle类的一个实例，可以通过getTitle()方法来获得标题的引用，使用setTitle()方法改变标题，使用TextTitle的setPosition()方法改变标题的位置：
+
+~~~java
+TextTitle title = chart.getTitle();
+chart.setTitle("A Chart Title");
+chart.getTitle().setPosition(RectangleEdge.BOTTOM);
+~~~
+
+​	如果不需要显示标题，可以将标题设置为null。
+
+#### 8.1.3 子标题
+
+​	图表可以有任意数量的子标题。可以创建任一Title类的子类的实例，并把它添加到图表中来添加一个子标题：
+
+~~~java
+TextTitle subtitle = new TextTitle("A Subtitle");
+chart.addSubtitle(subtitle);
+~~~
+
+​	可以添加任意数量的子标题，可是子标题会占用图表中用于实际绘制区域的面积。
+
+​	要改变一个已存在的子标题，需要通过getSubtitle(index)获得该子标题的引用：
+
+~~~java
+Title subtitle = chart.getSubtitle(0);
+~~~
+
+​	在改变子标题的属性之前，需要将Title类型转换为适当的子类型。
+
+​	通过getSubtitleCount()方法可以获得子标题的数量。
+
+#### 8.1.4 背景颜色
+
+​	通过使用setBackgroundPaint()方法来改变图表的背景颜色。
+
+~~~java
+chart.setBackgroundPaint(Color.blue);
+~~~
+
+​	可以使用Paint接口的任意实现，包括Color、GradientPaint和TexturePaint：
+
+~~~java
+Paint p = new GradientPaint(0, 0, Color.white, 1000, 0, Color.green);
+chart.setBackgroundPaint(p);
+~~~
+
+​	如果为图表指定了背景图片，那么建议将背景颜色设置为null。
+
+​	还可以设置图表绘图区域的背景颜色，其效果会稍有不同，这部分会在Plot类中进行介绍。
+
+#### 8.1.5 背景图片
+
+​	通过使用setBackgroundImage()方法来改变图表的背景图片：
+
+~~~java
+chart.setBackgroundImage(JFreeChart.INFO.getLogo());
+~~~
+
+​	默认情况下，图片会被放大来适应图表的大小。可以通过setBackgroundImageAlignment()方法来改变一下：
+
+~~~java
+chart.setBackgroundImageAlignment(Align.TOP_LEFT);
+~~~
+
+​	使用setBackgroundImageAlpha()方法，可以改变图片的透明度。
+
+​	如果只想让图片充满图表的数据区域（即座标轴之内的区域），那么您需要将背景图像添加到图表的绘图（Plot）中。
+
+#### 8.1.6 渲染提示
+
+​	JFreeChart使用Java2D API来进行绘制。使用这些API，可以指定渲染提示以微调渲染引擎工作方式的各个方面。
+
+​	JFreeChart允许您使用setRenderingHints()方法指定绘制图表时传递给Java2D API的呈现提示。
+
+​	为方便起见，提供了一种方法来打开或关闭抗锯齿。打开抗锯齿时，图表显示的更加平滑但耗时过长：
+
+~~~java
+// 打开抗锯齿
+chart.setAntiAlias(true);
+~~~
+
+​	默认情况下，绘制图表时打开抗锯齿。
+
+### 8.2 Plot 属性
+
+​	JFreeChart将一部分绘制图表的工作委托给了Plot类（或者Plot的子类）。通过getPlot()方法可以获得图表当前使用的Plot的引用：
+
+~~~java
+Plot plot = chart.getPlot();
+~~~
+
+​	需要将这个引用转换为特定的Plot的子类，例如：
+
+~~~java
+CategoryPlot plot = mychart.getCategoryPlot();
+
+XYPlot plot = mychart.getXYPlot();
+~~~
+
+​	如果plot不是适当的子类，这个函数将会抛出ClassCastException异常。
+
+#### 8.2.1 Plot子类
+
+​	怎么知道chart使用的是那个Plot子类呢？有经验的开发者能够清晰的知道哪些图表使用CategoryPlot，哪些图表使用XYPlot。如果不确定的话，可以查看ChartFactory的源码。
+
+#### 8.2.2 背景颜色
+
+​	使用setBackgroundPaint()方法来设置Plot的背景颜色，基本使用方法和设置Chart的背景颜色相同：
+
+~~~java
+Plot plot = chart.getPlot();
+plot.setBackgroundPaint(Color.green);
+~~~
+
+#### 8.2.3 背景图片
+
+​	使用setBackgroundImage()方法来设置Plot的背景图片，基本使用方法和设置Chart的背景图片相同：
+
+~~~java
+plot.setBackgroundImage(JFreeChart.INFO.getLogo());
+~~~
+
+### 8.3 座标轴属性
+
+​	使用JFreeChart创建的大多数图表都有两个轴，一个domain轴和一个range轴。也有一些图表（例如饼图）不使用座标轴。对于使用座标轴的图表，Axis对象由Plot类进行管理。
+
+#### 8.3.1 获得一个Axis引用
+
+​	CategoryPlot和XYPlot类都具有函数：getDomainAxis()、getRangeAxis()。这些方法都返回一个ValueAxis的引用，除了CategoryPlot类返回的domain轴是CategoryAxis的引用。
+
+~~~java
+// get an axis reference
+CategoryPlot myPlot = myChart.getCategoryPlot();
+CategoryAxis domainAxis = myPlot.getDomainAxis();
+
+// change axis properties
+domainAxis.setLabel("Categories");
+domainAxis.setLabelFont(someFont);
+~~~
+
+​	CategoryAxis和ValueAxis类有许多不同的子类。 有时，您需要将轴引用转换为更具体的子类，以便访问其某些属性。
+
+~~~java
+XYPlot myPlot = chart.getXYPlot();
+NumberAxis rangeAxis = (NumberAxis) myPlot.getRangeAxis();
+rangeAxis.setAutoRange(false);
+~~~
+
+#### 8.3.2 设置座标轴标签
+
+​	使用setLabel()方法来改变座标轴标签。如果不需要标签，可以将标签设置为null。
+
+​	使用Axis类中的setLabelFont()、setLabelPaint()、setLabelInsets()方法来改变标签的字体、颜色、间距（标签外部周围的空间）。
+
+#### 8.3.3 旋转座标轴标签
+
+​	当座标轴被绘制在Plot的左边或右边时，标签会自动旋转90度来减少所占用的空间。如果需要将标签水平显示，可以这样做：
+
+~~~java
+XYPlot plot = chart.getXYPlot();
+ValueAxis axis = plot.getRangeAxis();
+axis.setLabelAngle(Math.PI / 2.0);
+~~~
+
+​	角度是按照弧度进行指定的。
+
+#### 8.3.4 隐藏刻度线标签
+
+~~~java
+CategoryPlot plot = chart.getCategoryPlot();
+ValueAxis axis = plot.getRangeAxis();
+axis.setTickLabelsVisible(false);
+~~~
+
+​	对于CategoryAxis，setTickLabelsVisible(false)会隐藏类别标签。
+
+#### 8.3.5 隐藏刻度线
+
+~~~java
+XYPlot plot = chart.getXYPlot();
+ValueAxis axis = plot.getDomainAxis();
+axis.setTickMarksVisible(false);
+~~~
+
+​	Category 座标轴没有刻度线。
+
+#### 8.3.6 设置刻度大小
+
+​	默认情况下，数字和日期轴会自动选择一个刻度大小，以便刻度标签不会重叠。可以使用setTickUnit()方法来设置一个你需要的刻度大小。另外，对于NumberAxis或DateAxis，您可以指定自己的刻度单位集，轴将自动从中选择合适的刻度大小。
+
+#### 8.3.7 指定“标准”的数字刻度大小
+
+​	在NumberAxis类中，setStandardTickUnits()方法允许你为「自动选择刻度大小」机制提供一系列自定义的刻度大小。
+
+​	例如，你需要一个显示整数的数值座标轴。在NumberAxis类中有一个静态方法可以返回一系列标准的整数刻度大小：
+
+~~~java
+XYPlot plot = chart.getXYPlot();
+NumberAxis axis = (NumberAxis) plot.getRangeAxis();
+TickUnits units = NumberAxis.createIntegerTickUnits();
+axis.setStandardTickUnits(units);
+~~~
+
+​	如果您想更好地控制标准刻度单位，则可以自由创建自己的TickUnits集合。
+
+#### 8.3.8 指定“标准”的日期刻度大小
+
+​	在DateAxis类中，同样存在setStandardTickUnits()方法允许你为「自动选择刻度大小」机制提供一系列自定义的刻度大小。
+
+​	createStandardDateTickUnits()方法为DateAxis返回默认的集合，也可以自由创建自己的TickUnits集合。
