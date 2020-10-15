@@ -74,3 +74,55 @@ person.name
 [1].name
 ~~~
 
+​	Struts 2使用标准的Context来进行OGNL表达式求值，OGNL处理的顶级对象是一个Context，这个Context对象就是一个Map类型实例。在该OGNL的Context中，有一个根对象就是OGNL ValueStack。如果需要访问ValueStack里的属性，直接通过如下方式：
+
+~~~jsp
+// 取得ValueStack中的bar属性
+${bar}
+~~~
+
+​	除此之外，Struts 2还提供了了一些命名对象，这些命名对象与根对象无关，它们只是存在于Stack Context之中，访问这些对象时需要使用#前缀来指明。
+
+- paramerters对象：用于访问HTTP请求参数。例如#parameters['foo']或#parameters.foo，用于返回调用HttpServletRequest的getParameter("foo")方法的返回值；
+- request对象：用于访问HttpServletRequest的属性。例如#request['foo']或#request.foo，用于返回调用HttpServletRequest的getAttribute("foo")方法的返回值；
+- session对象：用于访问HttpSession的属性。例如#session['foo']或#session.foo，用于返回调用HttpSession的getAttribute("foo")方法的返回值；
+- application对象：用于访问ServletContext的属性。例如#application['foo']或#application.foo，用于返回调用ServletContext的getAttribute("foo")方法的返回值；
+- attr对象：如果可以访问到，则访问PageContext，否则将依次搜索如下对象：HttpServletRequest、HttpSession、ServletContext中的属性。
+
+**注意：当系统创建了Action实例后，该Action实例已经被保存到ValueStack中，故无需书写#即可访问Action属性。**
+
+### 1.3 OGNL中的集合操作
+
+​	直接生成List类型集合的语法为：`{e1, e2, e3, ...}`；
+
+​	直接生成List类型集合的语法为：`#{key1:value1, key2:value2, key3:value3, ...}`；
+
+​	对于集合，OGNL提供了两个元素符：in和not in，其中in判断某个元素是否在指定集合中，not in用于判断某个元素是否不在指定集合中。
+
+~~~jsp
+<s:if test="'foo' in {'foo', 'bar'}">包含</s:if>
+<s:else></s:else>
+<s:if test="'foo' not in {'foo', 'bar'}">不包含</s:if>
+<s:else></s:else>
+~~~
+
+​	OGNL还允许通过某个规则取得集合的子集。有如下3个操作符：
+
+- ？：取出所有符合选择逻辑的元素；
+- ^：取出符合选择逻辑的第一个元素；
+- $：取出符合选择逻辑的最后一个元素；
+
+~~~jsp
+// 取出person的所有性别为male的relatives集合
+person.relatives.{? #this.gender == 'male'}
+~~~
+
+### 1.4 Lambda表达式
+
+​	OGNL支持基本的Lambda表达式语法，通过这种表达式语法，可以在OGNL表达式中使用一些简单的函数。
+
+~~~jsp
+// 一个斐波那契数列
+<s:property value="#fib = :[#this == 0 ? 0 : #this == 1 ? 1 : #fib(#this - 2) + #fib(#this - 1)], #fib(this)"></s:property>
+~~~
+
